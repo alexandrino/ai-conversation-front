@@ -25,3 +25,13 @@ This Application will run on http://localhost:3000
 ```bash
 npm start
 ```
+
+### Tech Debts:
+
+- Use winston lib to write logs
+- Write unit and integration tests
+- Create a Docker file to run the app inside a container
+- Create a docker-compose file to run all services
+- Create hooks to run lint/tests before git commit
+- Maybe create a version in TS
+- extract the components to a specific dir
