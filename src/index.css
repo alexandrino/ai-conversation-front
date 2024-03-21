@@ -41,8 +41,15 @@ body {
   margin-bottom: 10px;
 }
 .app {
-  width: 60%;
+  width: 80%;
   margin: 0 auto;
+  display: flex;
+}
+.chat-box {
+  width: 80%;
+}
+.summary-box {
+  width: 20%;
 }
 
 p {

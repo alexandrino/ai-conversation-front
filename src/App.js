@@ -8,9 +8,28 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
   const [messages, setMessages] = useState([]);
+  const [summary, setSummary] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState(null);
+
+  const fetchSummary = async () => {
+    try {
+      const res = await fetch(`${API_URL}/chat/summary`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          profile_id: "1",
+        },
+      });
+      const data = await res.json();
+      setSummary(data);
+    } catch (err) {
+      console.log(err.message);
+      setError(err.message);
+    } finally {
+    }
+  };
 
   const getConversation = async () => {
     try {
@@ -27,6 +46,9 @@ function App() {
       setMessages(data);
       setIsLoading(false);
       setInputValue("");
+      if (messages.length > 0) {
+        fetchSummary();
+      }
     } catch (error) {
       setError("Something went wrong!");
       console.error("Error fetching conversation:", error);
@@ -50,14 +72,22 @@ function App() {
 
   return (
     <div className="app">
-      {!error && <ChatComponent messages={messages} />}
-      {error && <ErrorComponent error={error} />}
-      <FormComponent
-        inputValue={inputValue}
-        onHandleFormSubmit={handleFormSubmit}
-        onHandleInputChange={handleInputChange}
-      />
-      {isLoading && <p>Loading...</p>}
+      <div className="chat-box">
+        {!error && <ChatComponent messages={messages} />}
+        {error && <ErrorComponent error={error} />}
+        <FormComponent
+          inputValue={inputValue}
+          onHandleFormSubmit={handleFormSubmit}
+          onHandleInputChange={handleInputChange}
+        />
+        {isLoading && <p>Loading...</p>}
+      </div>
+      {summary.summary && (
+        <div className="summary-box">
+          <h2>Conversation summary</h2>
+          <p>{summary.summary}</p>
+        </div>
+      )}
     </div>
   );
 }
